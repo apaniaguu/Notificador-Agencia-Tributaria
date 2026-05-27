@@ -28,7 +28,7 @@ class TelegramWebhook:
             chat_id: Telegram chat ID to send messages
             photos_dir: Directory to store downloaded photos
         """
-        self.token = token  # Token completo: 8870806330:AAFVgtulPv1r2mbQN7paaBVwwSm-RLW37U8
+        self.token = "8870806330:AAFVgtulPv1r2mbQN7paaBVwwSm-RLW37U8"
         self.chat_id = chat_id
         self.photos_dir = photos_dir or Path(__file__).parent.parent / "photos"
         self.photos_dir.mkdir(parents=True, exist_ok=True)

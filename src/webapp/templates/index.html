@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subastas de Vehículos - AEAT</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        h1 { color: #333; margin-bottom: 20px; }
+        .vehicle-card { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .vehicle-card h2 { color: #2563eb; margin-bottom: 15px; font-size: 1.2em; }
+        .photo-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 15px; }
+        .photo { width: 100%; height: 100px; object-fit: cover; border-radius: 4px; cursor: pointer; }
+        .photo:hover { opacity: 0.8; }
+        .info { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
+        .info span { font-weight: 600; color: #666; }
+        .info strong { color: #333; }
+        .loading { text-align: center; padding: 40px; color: #666; }
+        .no-vehicles { text-align: center; padding: 40px; color: #666; }
+        @media (max-width: 768px) { .photo-grid { grid-template-columns: repeat(3, 1fr); } .info { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 Subastas de Vehículos - AEAT</h1>
+        {% if vehicles %}
+            {% for vehicle in vehicles %}
+            <div class="vehicle-card">
+                <h2>🚗 {{ vehicle.marca_modelo }}</h2>
+                <div class="photo-grid">
+                    {% for photo_url in vehicle.fotos[:5] %}
+                    {% if photo_url %}
+                    <img src="{{ photo_url }}" class="photo" alt="Foto {{ loop.index }}">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="info">
+                    <span>💰 Valoración:</span> <strong>{{ vehicle.valoracion|int|float | round(2) }}€</strong>
+                    <span>⚖️ Cargas:</span> <strong>{{ vehicle.cargas|int|float | round(2) }}€</strong>
+                    <span>💰 Neto:</span> <strong>{{ vehicle.valor_neto|int|float | round(2) }}€</strong>
+                    <span>📅 Fin:</span> <strong>{{ vehicle.fin_subasta }}</strong>
+                </div>
+                <div class="info">
+                    <span>📁 Tipo:</span> <strong>{{ vehicle.tipo_descripcion }}</strong>
+                    <span>🔢 Matrícula:</strong> <strong>{{ vehicle.matricula or 'Sin matrícula' }}</strong>
+                    <span>📍 Provincia:</strong> <strong>{{ vehicle.cod_provincia }}</strong>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="loading">Cargando datos...</p>
+        {% endif %}
+    </div>
+</body>
+</html>
