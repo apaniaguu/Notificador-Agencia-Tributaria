@@ -2,12 +2,11 @@ from flask import Flask, render_template_string, jsonify
 from pathlib import Path
 from src.scrapers.aetat import AEATScraper
 from src.database import HistoryDB
-from src.webhook.telegram import TelegramWebhook
 
 app = Flask(__name__)
+
 TEMPLATES_DIR = Path('/home/apaniaguu/Notificador-Agencia-Tributaria/src/webapp/templates')
 TEMPLATES_DIR.mkdir(exist_ok=True)
-
 
 @app.template_filter('currency')
 def format_currency(value):
