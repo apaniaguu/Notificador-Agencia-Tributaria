@@ -29,6 +29,7 @@ output/
 .DS_Store
 Thumbs.db
 
-# OpenSpec
+# OpenSpec - no versionar
 openspec/changes/*/specs/
-openspec/changes/*/design/
+openspec/specs/
+openspec/changes/archive/

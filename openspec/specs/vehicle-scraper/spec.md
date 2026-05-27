@@ -1,6 +1,6 @@
 # Spec: Vehicle Scraper
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Data Fetching
 The scraper SHALL fetch vehicle data from the AEAT public JS file.
@@ -59,8 +59,6 @@ The system SHALL send notifications for vehicles matching criteria.
 - **GIVEN** no vehicles match the criteria
 - **WHEN** the notification is triggered
 - **THEN** the scraper logs "No matching vehicles found" and exits
-
-## MODIFIED Requirements
 
 ### Requirement: Vehicle Deduplication
 The system SHALL deduplicate vehicles across scrapes using vehicle ID.
