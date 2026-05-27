@@ -39,8 +39,13 @@ output:
     - csv
     - summary
 
-# Telegram (opcional)
+# Telegram
 telegram:
-  enabled: false
-  token: ""
-  chat_id: ""
+  enabled: true
+  token: "8870806330:AAFVgtulPv1r2mbQN7paaBVwwSm-RLW37U8"
+  chat_id: "753321710"
+
+# Historial
+history:
+  db_path: "data/history.db"
+  keep_scrapes: 30
