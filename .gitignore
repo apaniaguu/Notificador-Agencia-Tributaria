@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+venv/
+.venv/
+env/
+
+# Output
+output/
+*.json
+*.csv
+
+# Config secrets
+*.secret.yaml
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# OpenSpec
+openspec/changes/*/specs/
+openspec/changes/*/design/
