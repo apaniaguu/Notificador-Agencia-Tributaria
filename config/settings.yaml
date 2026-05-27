@@ -1,51 +1,30 @@
 # Configuración del notificador de subastas AEAT
 
 scraper:
-  # URL del archivo JS de la AEAT (no cambiar normalmente)
   url: "https://www2.agenciatributaria.gob.es/static_files/common/internet/dep/taiif/subastaInmuebles/data2/bienes.js"
   timeout: 30
 
-# Filtros de vehículos
 filters:
-  # Código de provincia (None = todas)
-  # Provincias: 2=Almería, 3=Alicante, 4=Valencia, 8=Barcelona, 13=Ciudad Real, 15=A Coruña,
-  # 28=Madrid, 29=Málaga, 30=Murcia, 45=Toledo, 46=Valencia, 50=Zaragoza, etc.
   provincia: null
-  
-  # Máximo de días hasta fin de subasta (null = sin límite)
   max_dias: null
-  
-  # Tipos de vehículo (null = todos)
-  # 101=Turismo, 102=Motocicleta, 103=Furgoneta, 104=Camión, 105=Todo Terreno
   tipos: null
-  
-  # Rango de valoración en euros
   min_valoracion: null
   max_valoracion: null
-  
-  # Combustible (D=Diésel, G=Gasolina, H=Híbrido, E=Eléctrico)
   combustible: null
-  
-  # Uso (1=Particular, 6=Profesional, 9=Alquiler sin conductor)
   uso: null
 
-# Salida
 output:
-  # Directorio de salida
   directory: "output"
-  # Formatos: json, csv, summary (todos por defecto)
   formats:
     - json
     - csv
     - summary
 
-# Telegram
 telegram:
   enabled: true
   token: "8870806330:AAFVgtulPv1r2mbQN7paaBVwwSm-RLW37U8"
   chat_id: "753321710"
 
-# Historial
 history:
   db_path: "data/history.db"
   keep_scrapes: 30

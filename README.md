@@ -1,80 +1,101 @@
-# Notificador Agencia Tributaria
+# Notificador Agencia Tributaria - Primera versión
 
-Scraper y notificador de subastas de vehículos de la Agencia Tributaria española (AEAT).
+## 📋 Descripción
+Aplicación para scrapear y notificar subastas de vehículos de la Agencia Tributaria (AEAT).
 
-## Descripción
+## 🎯 Funcionalidades
+- Scrapeo de vehículos en subasta de la AEAT
+- Notificación a Telegram con resumen de vehículos
+- Historial de scrapes con deduplicación
+- WebApp simple para ver resultados
 
-Este proyecto scrapea las subastas de vehículos publicadas por la AEAT en su sede electrónica y genera alertas/notificaciones basadas en filtros configurables.
+## ⚙️ Configuración
+```yaml
+# config/settings.yaml
+telegram:
+  enabled: true
+  token: "8870806330:***"
+  chat_id: "753321710"
+```
 
-## Funcionalidades
+## 📁 Estructura
+```
+Notificador-Agencia-Tributaria/
+├── config/
+│   └── settings.yaml
+├── src/
+│   ├── scrapers/
+│   │   └── aetat.py
+│   ├── database.py
+│   ├── models/
+│   │   └── history.py
+│   ├── webhook/
+│   │   └── telegram.py
+│   └── webapp/
+│       └── app.py
+├── data/
+│   └── history.db
+├── openspec/
+├── tests/
+│   ├── test_scraper.py
+│   ├── test_history.py
+│   └── test_telegram.py
+└── README.md
+```
 
-- **Scraping**: Descarga de datos de subastas desde el archivo JS público de la AEAT
-- **Filtrado**: Por provincia, tipo de vehículo, fecha de fin, valoración, combustible, uso
-- **Salida**: JSON, CSV y resumen en texto plano
-- **Notificaciones**: Integración con Telegram para alertas en tiempo real
-- **Historial**: Almacenamiento local de scrapes anteriores para detección de novedades
+## 🚀 Uso
 
-## Instalación
-
+### Scrapeo
 ```bash
-# Crear entorno virtual
-python3 -m venv venv
+cd /home/apaniaguu/Notificador-Agencia-Tributaria
 source venv/bin/activate
 
-# Instalar dependencias
-pip install -e .
+# Test scrapeo
+python -c "from src.scrapers.aetat import AEATScraper; s=AEATScraper(); print(len(s.scrape()), 'vehículos')"
+
+# Enviar notificación
+python -c "
+from src.scrapers.aetat import AEATScraper
+from src.webhook.telegram import TelegramWebhook
+
+scraper = AEATScraper()
+vehicles = scraper.scrape()
+
+webhook = TelegramWebhook(
+    token='8870806330:***',
+    chat_id=753321710,
+)
+
+webhook.notify_vehicles(vehicles)
+"
 ```
 
-## Uso
-
+### WebApp
 ```bash
-# Ejecución básica (usa config/settings.yaml)
-python -m src.main
-
-# Con filtros por línea de comandos
-python -m src.main --provincia 28 --max-dias 30
-python -m src.main --tipos 101,103 --min-valoracion 5000
-
-# Con config personalizada
-python -m src.main -c mi_config.yaml
+cd /home/apaniaguu/Notificador-Agencia-Tributaria
+source venv/bin/activate
+python src/webapp/app.py
 ```
 
-## Configuración
-
-Edita `config/settings.yaml` para personalizar filtros, salida y notificaciones Telegram.
-
-### Filtros disponibles
-
-| Filtro | Tipo | Descripción |
-|--------|------|-------------|
-| `provincia` | int | Código de provincia (2=Almería, 28=Madrid, etc.) |
-| `max_dias` | int | Máximo de días hasta fin de subasta |
-| `tipos` | list[int] | Tipos de vehículo (101=Turismo, 103=Furgoneta, etc.) |
-| `min_valoracion` | float | Valoración mínima en € |
-| `max_valoracion` | float | Valoración máxima en € |
-| `combustible` | str | D=Diésel, G=Gasolina, H=Híbrido, E=Eléctrico |
-| `uso` | int | 1=Particular, 6=Profesional, 9=Alquiler |
-
-## Estructura del proyecto
-
+## 📊 Salida del mensaje
 ```
-src/
-├── models/          # Modelos de datos (Vehicle)
-├── filters/         # Filtros configurables
-├── scrapers/        # Scraper de la AEAT
-├── notifications/   # Notificaciones (Telegram)
-├── output.py        # Exportación JSON/CSV/Summary
-└── main.py          # Entry point CLI
-tests/               # Tests unitarios
-config/              # Configuración YAML
-output/              # Resultados generados
+🚗 TODO TERRENO MERCEDES ML 320
+
+📊 Valoración: 12,500.00€
+⚖️ Cargas: 0.00€
+💰 Neto: 12,500.00€
+
+📁 Tipo: Turismos
+🔢 Matrícula: Sin matrícula
+📅 Fin subasta: 2026-06-15
+
+📍 Provincia: 28
 ```
 
-## OpenSpec
+## 🧪 Tests
+```bash
+pytest tests/
+```
 
-Este proyecto sigue el flujo de trabajo OpenSpec para desarrollo spec-driven.
-Los cambios se documentan en `openspec/changes/`.
-
-## Licencia
-
-MIT
+## 📝 Historial
+- v0.1.0 - Primera versión con webhook Telegram
