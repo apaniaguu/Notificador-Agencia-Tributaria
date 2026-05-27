@@ -1,8 +1,7 @@
-# vehicle-scraper Specification
+# Spec: Vehicle Scraper
 
-## Purpose
-TBD - created by archiving change scrape-vehiculos. Update Purpose after archive.
-## Requirements
+## ADDED Requirements
+
 ### Requirement: Data Fetching
 The scraper SHALL fetch vehicle data from the AEAT public JS file.
 
@@ -61,3 +60,62 @@ The system SHALL send notifications for vehicles matching criteria.
 - **WHEN** the notification is triggered
 - **THEN** the scraper logs "No matching vehicles found" and exits
 
+## MODIFIED Requirements
+
+### Requirement: Vehicle Deduplication
+The system SHALL deduplicate vehicles across scrapes using vehicle ID.
+
+#### Scenario: Duplicate vehicle detected
+- **GIVEN** a vehicle with ID "X" was already scraped in a previous run
+- **WHEN** the scraper runs again and finds vehicle "X"
+- **THEN** the vehicle is recorded as "unchanged"
+- **AND** no notification is sent for it
+
+#### Scenario: New vehicle detected
+- **GIVEN** no previous record exists for vehicle ID "X"
+- **WHEN** the scraper finds vehicle "X" in current run
+- **THEN** the vehicle is recorded as "new"
+- **AND** it is included in notifications if it matches filters
+
+#### Scenario: Disappeared vehicle
+- **GIVEN** vehicle "X" was present in a previous scrape
+- **WHEN** vehicle "X" does not appear in the current scrape
+- **THEN** the vehicle is recorded as "disappeared"
+- **AND** a log entry is created for the disappearance
+
+### Requirement: History Storage
+The system SHALL persist scrape results to a local SQLite database.
+
+#### Scenario: First scrape
+- **GIVEN** no history database exists
+- **WHEN** the scraper runs
+- **THEN** the database is created automatically
+- **AND** all scraped vehicles are stored with timestamp and scrape_id
+
+#### Scenario: Subsequent scrapes
+- **GIVEN** a history database with previous scrapes
+- **WHEN** the scraper runs
+- **THEN** new vehicles are appended with a new scrape_id
+- **AND** existing vehicles are marked as unchanged
+- **AND** disappeared vehicles are logged
+
+#### Scenario: History query
+- **GIVEN** multiple scrapes stored in the database
+- **WHEN** the history is queried
+- **THEN** results include all vehicles with their scrape timestamps
+- **AND** results can be filtered by date, province, and type
+
+### Requirement: Retention Policy
+The system SHALL enforce a configurable retention policy for history.
+
+#### Scenario: Default retention
+- **GIVEN** no retention policy is configured
+- **WHEN** history is cleaned up
+- **THEN** the last 30 scrapes are kept
+- **AND** older scrapes are removed
+
+#### Scenario: Custom retention
+- **GIVEN** a retention policy of N scrapes is configured
+- **WHEN** history is cleaned up
+- **THEN** the last N scrapes are kept
+- **AND** older scrapes are removed
